@@ -8,15 +8,16 @@
 </head>
 <body>
     <header>
-        <h1>Meu Catálogo de Filmes</h1>
+        <h1>Meu Catálogo de Filmes e Séries</h1>
+        <input type="text" id="search-input" placeholder="Buscar por título..." />
     </header>
 
     <section class="form-container">
-        <h2>Adicionar Novo Filme</h2>
+        <h2>Adicionar Novo Filme/Série</h2>
         <form id="add-movie-form">
-            <input type="text" id="titulo" placeholder="Título do Filme" required>
+            <input type="text" id="titulo" placeholder="Título" required>
             <input type="text" id="descricao" placeholder="Descrição">
-            <input type="number" id="ano" placeholder="Ano de Lançamento">
+            <input type="date" id="ano" placeholder="Ano de Lançamento">
             <input type="text" id="poster_url" placeholder="URL da Imagem do Pôster">
             <button type="submit">Adicionar Filme</button>
         </form>
