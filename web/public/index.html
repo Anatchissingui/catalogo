@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Catálogo de Filmes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Meu Catálogo de Filmes</h1>
+    </header>
+
+    <section class="form-container">
+        <h2>Adicionar Novo Filme</h2>
+        <form id="add-movie-form">
+            <input type="text" id="titulo" placeholder="Título do Filme" required>
+            <input type="text" id="descricao" placeholder="Descrição">
+            <input type="number" id="ano" placeholder="Ano de Lançamento">
+            <input type="text" id="poster_url" placeholder="URL da Imagem do Pôster">
+            <button type="submit">Adicionar Filme</button>
+        </form>
+    </section>
+
+    <main id="movie-grid">
+        <!-- Os filmes do banco de dados aparecerão aqui -->
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

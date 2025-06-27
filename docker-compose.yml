@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Serviço 1: Banco de Dados (PostgreSQL)
+  db:
+    image: postgres:14-alpine
+    container_name: catalogo_db
+    restart: always
+    env_file:
+      - ./.env # Carrega as variáveis de ambiente do arquivo .env
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql # Executa o script de criação da tabela
+      - postgres_data:/var/lib/postgresql/data # Garante que os dados não sejam perdidos
+    ports:
+      - "5432:5432" # Expõe a porta do Postgres para podermos conectar com um cliente externo, se quisermos
+
+  # Serviço 2: API (Backend Node.js)
+  api:
+    build: ./api
+    container_name: catalogo_api
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "3001:3000"
+    depends_on:
+      - db # Garante que o banco de dados inicie antes da API
+    
+  # Serviço 3: Frontend (Web)
+  web:
+    build: ./web
+    container_name: catalogo_web
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - api # Garante que a API inicie antes do frontend
+
+volumes:
+  postgres_data:

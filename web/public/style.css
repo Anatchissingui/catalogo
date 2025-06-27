@@ -1,0 +1,12 @@
+body { font-family: Arial, sans-serif; background-color: #141414; color: #fff; margin: 0; }
+header { background-color: #000; padding: 20px; text-align: center; }
+.form-container { background-color: #222; padding: 20px; margin: 20px; border-radius: 8px; }
+.form-container h2 { margin-top: 0; }
+#add-movie-form { display: flex; flex-direction: column; gap: 10px; }
+#add-movie-form input { padding: 10px; border: 1px solid #444; background-color: #333; color: white; border-radius: 4px; }
+#add-movie-form button { padding: 10px 15px; background-color: #e50914; color: white; border: none; cursor: pointer; border-radius: 4px; align-self: flex-start; }
+#movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
+.movie-card { position: relative; background-color: #222; border-radius: 5px; overflow: hidden; }
+.movie-card img { width: 100%; height: 300px; object-fit: cover; }
+.movie-card h3 { font-size: 1em; padding: 10px; margin: 0; }
+.delete-btn { position: absolute; top: 5px; right: 5px; background-color: rgba(229, 9, 20, 0.8); color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-weight: bold; }
