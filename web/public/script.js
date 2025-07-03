@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/filmes';
+const API_URL = 'http://localhost:3001/api/filmes';
 const movieGrid = document.getElementById('movie-grid');
 const addMovieForm = document.getElementById('add-movie-form');
  
