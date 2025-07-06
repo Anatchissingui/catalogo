@@ -14,7 +14,7 @@ async function carregarFilmes() {
         console.error('Erro ao carregar filmes:', error);
     }
 }
- 
+
 // Exibe os filmes na tela
 function exibirFilmes(filmes) {
     movieGrid.innerHTML = '';
