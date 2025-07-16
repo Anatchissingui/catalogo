@@ -1,33 +1,69 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Catálogo de Filmes</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Catálogo de Filmes</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Meu Catálogo de Filmes e Séries</h1>
-        <input type="text" id="search-input" placeholder="Buscar por título..." />
-    </header>
+<header>
+<h1>Meu Catálogo de Filmes e Séries</h1>
+<input type="text" id="search-input" placeholder="Buscar por título..." autocomplete="off" />
+</header>
 
-    <section class="form-container">
-        <h2>Adicionar Novo Filme/Série</h2>
-        <form id="add-movie-form">
-            <input type="text" id="titulo" placeholder="Título" required>
-            <input type="text" id="descricao" placeholder="Descrição">
-            <input type="date" id="ano" placeholder="Ano de Lançamento">
-            <input type="text" id="poster_url" placeholder="URL da Imagem do Pôster">
-            <button type="submit">Adicionar Filme</button>
-        </form>
-    </section>
-
-    <main id="movie-grid">
-        <!-- Os filmes do banco de dados aparecerão aqui -->
-    </main>
-    
-
-    <script src="script.js"></script>
+  <section class="form-container">
+<h2>Adicionar Novo Filme/Série</h2>
+<form id="add-movie-form">
+<input type="text" id="titulo" placeholder="Título" required autocomplete="off">
+<input type="text" id="descricao" placeholder="Descrição" autocomplete="off">
+<input type="number" id="ano" placeholder="Ano de Lançamento" min="1900" max="2100" autocomplete="off">
+<input type="url" id="poster_url" placeholder="URL da Imagem do Pôster" autocomplete="off">
+<button type="submit">Adicionar Filme</button>
+</form>
+</section>
+ 
+  <main id="movie-grid">
+<!-- Os filmes do banco de dados aparecerão aqui -->
+</main>
+ 
+  <!-- Modal de detalhes / edição -->
+<div id="details-modal" class="modal hidden">
+<div class="modal-content">
+<button id="close-modal" class="close-btn" aria-label="Fechar modal">✕</button>
+<button id="save-btn" class="save-btn hidden">Salvar</button>
+<button id="cancel-btn" class="cancel-btn hidden">Cancelar</button>
+      <img id="modal-img" src="" alt="Poster">
+ 
+      <div class="field">
+<label>Título</label>
+<input id="modal-title" type="text" readonly>
+</div>
+ 
+      <div class="field">
+<label>Descrição</label>
+<textarea id="modal-desc" rows="4" readonly></textarea>
+</div>
+ 
+      <div class="field">
+<label>Ano</label>
+<input id="modal-year" type="number" min="1900" max="2100" readonly>
+</div>
+ 
+      <div class="field">
+<label>URL da Imagem</label>
+<input id="modal-poster" type="url" readonly>
+</div>
+ 
+      <div class="buttons">
+<button id="edit-btn">Editar</button>
+<button id="save-btn" class="hidden">Salvar</button>
+<button id="cancel-btn" class="hidden">Cancelar</button>
+</div>
+</div>
+</div>
+ 
+  <script src="script.js"></script>
 </body>
 </html>
