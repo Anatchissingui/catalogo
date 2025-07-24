@@ -12,84 +12,6 @@ const app = express();
 
 const PORT = 3001;
  
-// ---------- Swagger config ----------
-
-const swaggerOptions = {
-
-  swaggerDefinition: {
-
-    openapi: '3.0.0',
-
-    info: {
-
-      title: 'API do Catálogo de Filmes',
-
-      version: '1.0.0',
-
-      description: 'Uma API para gerenciar um catálogo de filmes.',
-
-    },
-
-    servers: [{ url: `http://localhost:${PORT}` }],
-
-  },
-
-  apis: ['./index.js'],
-
-};
- 
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
- 
-// ---------- Middlewares ----------
-
-app.use(cors());
-
-app.use(express.json());
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
- 
-// ---------- Swagger extra endpoints ----------
-
-/**
-
-* @swagger
-
-* /:
-
-*   get:
-
-*     summary: Verificação de saúde da API
-
-*     responses:
-
-*       200:
-
-*         description: API está no ar.
-
-*/
- 
-/**
-
-* @swagger
-
-* /api-docs:
-
-*   get:
-
-*     summary: Interface Swagger UI
-
-*     description: Abre a documentação interativa da API.
-
-*     responses:
-
-*       200:
-
-*         description: Documentação carregada com sucesso.
-
-*/
- 
-// ---------- Schemas ----------
-
 /**
 
 * @swagger
@@ -112,41 +34,95 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 *           type: integer
 
-*           description: ID gerado automaticamente.
+*           description: O ID gerado automaticamente do filme.
 
 *         titulo:
 
 *           type: string
 
-*           description: Título do filme.
+*           description: O título do filme.
 
 *         descricao:
 
 *           type: string
 
-*           description: Sinopse ou descrição.
+*           description: Uma breve sinopse do filme.
 
 *         ano:
 
 *           type: integer
 
-*           description: Ano de lançamento.
+*           description: O ano de lançamento do filme.
 
 *         poster_url:
 
 *           type: string
 
-*           description: URL da imagem do pôster.
+*           description: A URL do pôster do filme.
 
 */
  
-// ---------- Rotas ----------
+// ------------------------ swagger config ------------------------
+
+const swaggerOptions = {
+
+  swaggerDefinition: {
+
+    openapi: '3.0.0',
+
+    info: {
+
+      title: 'API do Catálogo de Filmes',
+
+      version: '1.0.0',
+
+      description: 'Uma API para gerenciar um catálogo de filmes.',
+
+    },
+
+    servers: [{ url: `http://localhost:${PORT}` }],
+
+  },
+
+  apis: ['./src/index.js'], // Ajuste conforme a localização do arquivo
+
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+ 
+// ------------------------ middlewares ------------------------
+
+app.use(cors());
+
+app.use(express.json()); // essencial para JSON no body
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+ 
+/**
+
+* @swagger
+
+* /:
+
+*   get:
+
+*     summary: Endpoint de verificação de saúde da API
+
+*     responses:
+
+*       200:
+
+*         description: API está no ar.
+
+*/
 
 app.get('/', (req, res) => {
 
   res.send('API do Catálogo de Filmes está funcionando!');
 
 });
+ 
+// ------------------------ ROTAS CRUD ------------------------
  
 /**
 
@@ -156,7 +132,7 @@ app.get('/', (req, res) => {
 
 *   get:
 
-*     summary: Lista todos os filmes
+*     summary: Retorna a lista de todos os filmes
 
 *     tags: [Filmes]
 
@@ -164,7 +140,7 @@ app.get('/', (req, res) => {
 
 *       200:
 
-*         description: Lista de filmes.
+*         description: Lista de filmes retornada com sucesso.
 
 *         content:
 
@@ -188,7 +164,7 @@ app.get('/api/filmes', async (req, res) => {
 
     res.status(200).json(filmes);
 
-  } catch {
+  } catch (error) {
 
     res.status(500).json({ error: 'Erro ao buscar filmes.' });
 
@@ -224,7 +200,7 @@ app.get('/api/filmes', async (req, res) => {
 
 *       201:
 
-*         description: Filme criado.
+*         description: Filme criado com sucesso.
 
 *         content:
 
@@ -236,24 +212,27 @@ app.get('/api/filmes', async (req, res) => {
 
 *       400:
 
-*         description: Título obrigatório.
+*         description: Dados de entrada inválidos.
 
 */
 
 app.post('/api/filmes', async (req, res) => {
-  
-  console.log('Dados recebidos:', req.body);
+
   const { titulo, descricao, ano, poster_url } = req.body;
 
-  if (!titulo) return res.status(400).json({ error: 'O título é obrigatório.' });
- 
+  if (!titulo) {
+
+    return res.status(400).json({ error: 'O título é obrigatório.' });
+
+  }
+
   try {
 
     const novoFilme = await queries.criarFilme({ titulo, descricao, ano, poster_url });
 
     res.status(201).json(novoFilme);
 
-  } catch {
+  } catch (error) {
 
     res.status(500).json({ error: 'Erro ao criar filme.' });
 
@@ -269,7 +248,7 @@ app.post('/api/filmes', async (req, res) => {
 
 *   delete:
 
-*     summary: Deleta um filme por ID
+*     summary: Remove um filme pelo ID
 
 *     tags: [Filmes]
 
@@ -285,11 +264,13 @@ app.post('/api/filmes', async (req, res) => {
 
 *           type: integer
 
+*         description: O ID do filme a ser removido
+
 *     responses:
 
 *       200:
 
-*         description: Filme deletado.
+*         description: Filme removido com sucesso.
 
 *       404:
 
@@ -301,8 +282,6 @@ app.delete('/api/filmes/:id', async (req, res) => {
 
   const id = parseInt(req.params.id);
 
-  if (isNaN(id)) return res.status(400).json({ error: 'ID inválido.' });
- 
   try {
 
     const deletado = await queries.deletarFilme(id);
@@ -317,7 +296,7 @@ app.delete('/api/filmes/:id', async (req, res) => {
 
     }
 
-  } catch {
+  } catch (error) {
 
     res.status(500).json({ error: 'Erro ao deletar filme.' });
 
@@ -325,89 +304,11 @@ app.delete('/api/filmes/:id', async (req, res) => {
 
 });
  
-/**
-
-* @swagger
-
-* /api/filmes/{id}:
-
-*   put:
-
-*     summary: Atualiza um filme
-
-*     tags: [Filmes]
-
-*     parameters:
-
-*       - in: path
-
-*         name: id
-
-*         required: true
-
-*         schema:
-
-*           type: integer
-
-*     requestBody:
-
-*       required: true
-
-*       content:
-
-*         application/json:
-
-*           schema:
-
-*             $ref: '#/components/schemas/Filme'
-
-*     responses:
-
-*       200:
-
-*         description: Filme atualizado.
-
-*       400:
-
-*         description: Dados inválidos.
-
-*       404:
-
-*         description: Filme não encontrado.
-
-*/
-
-app.put('/api/filmes/:id', async (req, res) => {
-
-  const id = parseInt(req.params.id);
-
-  const { titulo, descricao, ano, poster_url } = req.body;
- 
-  if (isNaN(id)) return res.status(400).json({ error: 'ID inválido.' });
-
-  if (!titulo) return res.status(400).json({ error: 'O título é obrigatório.' });
- 
-  try {
-
-    const atualizado = await queries.atualizarFilme(id, { titulo, descricao, ano, poster_url });
-
-    if (atualizado) return res.status(200).json(atualizado);
-
-    res.status(404).json({ error: 'Filme não encontrado.' });
-
-  } catch (err) {
-
-    res.status(500).json({ error: 'Erro ao atualizar filme.' });
-
-  }
-
-});
- 
-// ---------- Inicia servidor ----------
+// ------------------------ start server ------------------------
 
 app.listen(PORT, () => {
 
-  console.log(`✅ API rodando na porta ${PORT} | Swagger: http://localhost:${PORT}/api-docs`);
+  console.log(`API rodando na porta ${PORT} | Docs em http://localhost:${PORT}/api-docs`);
 
 });
 
